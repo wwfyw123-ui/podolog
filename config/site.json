@@ -1,65 +1,60 @@
 {
   "clinic": {
-    "doctorName": "Марина Соколова",
-    "profession": "Подолог",
-    "brand": "Марина Соколова · Подолог",
-    "city": "Москва",
-    "address": "Москва, ул. Садовая, 12",
+    "name": "Кабинет подолога",
     "phone": "+7 (999) 123-45-67",
-    "whatsapp": "https://wa.me/79991234567",
-    "telegram": "https://t.me/example_podolog",
-    "instagram": "https://instagram.com/example_podolog",
-    "workingHours": "Пн-Пт: 10:00-20:00 · Сб: 10:00-17:00",
-    "adminEmail": "doctor@example.ru"
+    "address": "г. Москва, ул. Примерная, 10",
+    "workHours": "Пн-Пт: 10:00–18:00, Сб: 10:00–14:00"
   },
   "seo": {
-    "title": "Марина Соколова - Подолог",
-    "description": "Медицинский педикюр, обработка трещин, мозолей и вросших ногтей. Онлайн-запись к подологу."
+    "title": "Запись к подологу онлайн",
+    "description": "Профессиональный уход за стопами..."
   },
   "hero": {
-    "eyebrow": "Подология и эстетика стоп",
-    "title": "Здоровые стопы без неловкости",
-    "lead": "Бережный медицинский педикюр, обработка трещин, мозолей и вросших ногтей в спокойном кабинете с понятным планом ухода.",
-    "cardTitle": "Стерильные инструменты",
-    "cardText": "Одноразовые расходники, мягкая диагностика и рекомендации после приема."
+    "title": "Здоровые стопы — здоровая жизнь",
+    "subtitle": "Запишитесь на приём к опытному подологу онлайн"
   },
   "services": [
     {
-      "id": "medical-pedicure",
-      "title": "Медицинский педикюр",
-      "description": "Аппаратная обработка стоп и ногтей с учетом чувствительности кожи.",
-      "priceFrom": 3500,
-      "icon": "🦶",
+      "id": "consultation",
+      "title": "Консультация подолога",
+      "description": "Осмотр, диагностика, составление плана лечения",
+      "priceFrom": 1500,
+      "icon": "stethoscope",
       "sortOrder": 1
     },
     {
-      "id": "corns-cracks",
-      "title": "Мозоли и трещины",
-      "description": "Безопасная обработка, разгрузка проблемных зон и домашний уход.",
-      "priceFrom": 2000,
-      "icon": "✨",
+      "id": "hardware-pedicure",
+      "title": "Аппаратный педикюр",
+      "description": "Безопасная обработка стоп профессиональным оборудованием",
+      "priceFrom": 2500,
+      "icon": "foot",
       "sortOrder": 2
     },
     {
       "id": "ingrown-nail",
-      "title": "Вросший ноготь",
-      "description": "Щадящая коррекция, консультация по обуви и профилактике повторения.",
-      "priceFrom": 2800,
-      "icon": "🌿",
+      "title": "Лечение вросшего ногтя",
+      "description": "Коррекция вросшего ногтя без боли и операций",
+      "priceFrom": 2000,
+      "icon": "bandage",
       "sortOrder": 3
+    },
+    {
+      "id": "fungus-treatment",
+      "title": "Лечение грибка",
+      "description": "Диагностика и терапия грибковых поражений",
+      "priceFrom": 1800,
+      "icon": "shield",
+      "sortOrder": 4
     }
   ],
   "schedule": {
     "daysToGenerate": 14,
-    "weekdayTimes": ["10:00", "12:30", "15:00", "17:30"],
-    "saturdayTimes": ["10:00", "12:00", "14:00"],
-    "durationMinutes": 60
+    "durationMinutes": 60,
+    "weekdayTimes": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"],
+    "saturdayTimes": ["10:00", "11:00", "12:00", "13:00"]
   },
   "legal": {
-    "operatorName": "ИП / самозанятый / ООО нужно вписать",
-    "operatorAddress": "Адрес оператора нужно вписать",
-    "contactEmail": "privacy@example.ru",
-    "dataStorageCountry": "Россия",
-    "retention": "до достижения цели обработки или отзыва согласия"
+    "operatorName": "ИП Иванова А.А.",
+    "contactEmail": "info@podolog.example"
   }
 }
