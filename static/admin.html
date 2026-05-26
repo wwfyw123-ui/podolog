@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>Управление записями</h1>
+            <div class="auth-box" id="auth-box">
+                <input type="password" id="admin-token" placeholder="Пароль администратора">
+                <button onclick="loadBookings()">Войти</button>
+            </div>
+        </header>
+
+        <div id="content-area" class="hidden">
+            <div class="controls">
+                <select id="status-filter" onchange="renderTable()">
+                    <option value="all">Все записи</option>
+                    <option value="new">Новые</option>
+                    <option value="confirmed">Подтвержденные</option>
+                    <option value="done">Выполненные</option>
+                    <option value="cancelled">Отмененные</option>
+                </select>
+                <button onclick="loadBookings()">🔄 Обновить</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Дата и время</th>
+                            <th>Пациент</th>
+                            <th>Контакты</th>
+                            <th>Услуга</th>
+                            <th>Комментарий</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookings-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="/js/admin.js"></script>
+</body>
+</html>
