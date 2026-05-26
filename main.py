@@ -13,11 +13,15 @@ from sqlalchemy.orm import declarative_base, sessionmaker, Session
 
 # --- НАСТРОЙКИ ---
 CONFIG_PATH = os.path.join("config", "site.json")
-DB_PATH = os.path.join("data", "clinic.sqlite")
+DATA_DIR = "data"
+DB_PATH = os.path.join(DATA_DIR, "clinic.sqlite")
 SQLALCHEMY_DATABASE_URL = f"sqlite:///{DB_PATH}"
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Убедимся, что папка data существует
+os.makedirs(DATA_DIR, exist_ok=True)
 
 # --- БАЗА ДАННЫХ (SQLAlchemy ORM) ---
 engine = create_engine(
@@ -40,7 +44,7 @@ class Service(Base):
 class Slot(Base):
     __tablename__ = "slots"
     id = Column(String, primary_key=True)
-    starts_at = Column(Text, nullable=False, unique=True) # Формат: YYYY-MM-DD HH:MM
+    starts_at = Column(Text, nullable=False, unique=True)
     duration_minutes = Column(Integer, default=60)
     active = Column(Integer, default=1)
 
@@ -56,9 +60,8 @@ class Booking(Base):
     privacy_accepted_at = Column(Text, default="")
     status = Column(Text, default="new")
     created_at = Column(Text, nullable=False)
-    # ВАЖНО: slot_id намеренно не unique=True, уникальность проверяется программно!
 
-# --- СХЕМЫ PYDANTIC (v2) ---
+# --- СХЕМЫ PYDANTIC ---
 class SiteConfigPublic(BaseModel):
     clinic: dict
     seo: dict
@@ -112,9 +115,8 @@ class AdminBookingPublic(BaseModel):
 class StatusUpdate(BaseModel):
     status: str
 
-# --- ЛОГИКА СИДИНГА И ЗАПУСКА ---
+# --- ЛОГИКА СИДИНГА ---
 def date_only_local():
-    """Возвращает текущую локальную дату."""
     return datetime.now()
 
 def seed_database():
@@ -128,12 +130,11 @@ def seed_database():
         config_data = json.load(f)
 
     with SessionLocal() as db:
-        # 1. Сидинг услуг (upsert)
+        # Услуги
         for s_data in config_data.get("services", []):
             service = db.query(Service).filter(Service.id == s_data["id"]).first()
             if not service:
                 service = Service(id=s_data["id"])
-            
             service.title = s_data["title"]
             service.description = s_data["description"]
             service.price_from = s_data["priceFrom"]
@@ -142,7 +143,7 @@ def seed_database():
             service.active = 1
             db.merge(service)
         
-        # 2. Сидинг слотов
+        # Слоты
         schedule_cfg = config_data.get("schedule", {})
         days_to_generate = schedule_cfg.get("daysToGenerate", 14)
         duration = schedule_cfg.get("durationMinutes", 60)
@@ -150,13 +151,10 @@ def seed_database():
         saturday_times = schedule_cfg.get("saturdayTimes", [])
 
         now = date_only_local()
-        
         for i in range(days_to_generate):
             current_date = now + timedelta(days=i)
             weekday = current_date.weekday()
-            
-            # Воскресенье пропускаем
-            if weekday == 6:
+            if weekday == 6:  # Пропускаем воскресенье
                 continue
                 
             times = saturday_times if weekday == 5 else weekday_times
@@ -170,28 +168,18 @@ def seed_database():
                 slot = db.query(Slot).filter(Slot.id == slot_id).first()
                 if not slot:
                     slot = Slot(id=slot_id)
-                
                 slot.starts_at = starts_at
                 slot.duration_minutes = duration
                 slot.active = 1
                 db.merge(slot)
 
         db.commit()
-        
-        # Логирование после старта
-        active_slots = db.query(Slot).filter(Slot.active == 1).count()
-        active_bookings = db.query(Booking).filter(Booking.status != "cancelled").count()
-        logger.info(f"БД подключена: {DB_PATH}")
-        logger.info(f"Активных слотов: {active_slots}")
-        logger.info(f"Активных броней: {active_bookings}")
-
+        logger.info("БД и слоты успешно инициализированы")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Выполняется при старте
     seed_database()
     yield
-    # Выполняется при остановке (здесь ничего не нужно)
 
 # --- ИНИЦИАЛИЗАЦИЯ FASTAPI ---
 app = FastAPI(title="Подолог API", lifespan=lifespan)
@@ -221,5 +209,6 @@ def get_site_config():
         "legal": data.get("legal", {})
     }
 
-# Подключение статики (должно быть в конце, чтобы не перехватить /api/)
+# Подключение статики (должно быть в конце)
+os.makedirs("static", exist_ok=True)
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
