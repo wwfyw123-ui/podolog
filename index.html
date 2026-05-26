@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Марина Соколова - Подолог</title>
+  <style>
+    :root {
+      --ink: #20231f;
+      --muted: #6a7068;
+      --line: rgba(32, 35, 31, 0.12);
+      --paper: #faf8f2;
+      --sage: #7e9a83;
+      --sage-dark: #466b4c;
+      --coral: #d88773;
+      --sky: #b9d6dc;
+      --white: rgba(255, 255, 255, 0.78);
+      --shadow: 0 24px 80px rgba(58, 67, 53, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 6%, rgba(185, 214, 220, 0.42), transparent 28rem),
+        radial-gradient(circle at 92% 0%, rgba(216, 135, 115, 0.26), transparent 24rem),
+        var(--paper);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+
+    #glow {
+      position: fixed;
+      z-index: 0;
+      width: 22rem;
+      height: 22rem;
+      border-radius: 999px;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      background: rgba(126, 154, 131, 0.12);
+      filter: blur(46px);
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem clamp(1rem, 4vw, 4rem);
+      border-bottom: 1px solid transparent;
+      backdrop-filter: blur(18px);
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    nav.sc {
+      background: rgba(250, 248, 242, 0.82);
+      border-color: var(--line);
+    }
+
+    .brand {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+      box-shadow: 0 14px 34px rgba(70, 107, 76, 0.22);
+    }
+
+    .navlinks {
+      display: flex;
+      gap: 1.1rem;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.8rem;
+      padding: 0 1.1rem;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 750;
+      background: var(--sage-dark);
+      box-shadow: 0 15px 34px rgba(70, 107, 76, 0.24);
+      cursor: pointer;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    section {
+      position: relative;
+      z-index: 1;
+      padding: clamp(4rem, 8vw, 7rem) clamp(1rem, 4vw, 4rem);
+    }
+
+    .hero {
+      min-height: calc(100vh - 76px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.82fr);
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: center;
+      padding-top: 4rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--sage-dark);
+      font-size: 0.9rem;
+      font-weight: 780;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 13ch;
+      margin: 1rem 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3.2rem, 8vw, 7.6rem);
+      line-height: 0.92;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 38rem;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 2rem;
+    }
+
+    .ghost {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.62);
+      box-shadow: none;
+      border: 1px solid var(--line);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 34rem;
+      border-radius: 32px;
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, rgba(255,255,255,0.2), rgba(255,255,255,0)),
+        linear-gradient(135deg, #dfe8dc, #f7e1d4 55%, #c9dee1);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .photo-shape {
+      position: absolute;
+      inset: 2rem;
+      border-radius: 999px 999px 38px 38px;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(255,255,255,0.8) 0 11%, transparent 12%),
+        linear-gradient(180deg, #f3d3c6 0 29%, #e8f0e6 30% 100%);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.48);
+    }
+
+    .toolbox {
+      position: absolute;
+      right: 1.25rem;
+      bottom: 1.25rem;
+      width: min(18rem, calc(100% - 2.5rem));
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,0.58);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 18px 42px rgba(52, 60, 48, 0.14);
+    }
+
+    .toolbox b { display: block; margin-bottom: 0.35rem; }
+    .toolbox span { color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
+
+    .r {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .r.v { opacity: 1; transform: translateY(0); }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      margin: 0;
+      max-width: 14ch;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 5vw, 4.4rem);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      max-width: 31rem;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .service {
+      min-height: 15rem;
+      padding: 1.35rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 0 12px 38px rgba(73, 80, 68, 0.07);
+    }
+
+    .service .ico {
+      width: 3rem;
+      height: 3rem;
+      display: grid;
+      place-items: center;
+      margin-bottom: 1.5rem;
+      border-radius: 50%;
+      background: rgba(126, 154, 131, 0.15);
+      font-size: 1.35rem;
+    }
+
+    .service h3 { margin: 0 0 0.65rem; font-size: 1.25rem; }
+    .service p { margin: 0; color: var(--muted); line-height: 1.6; }
+    .price { display: block; margin-top: 1.25rem; color: var(--sage-dark); font-weight: 800; }
+
+    .booking {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(22rem, 1.05fr);
+      gap: clamp(1.5rem, 4vw, 4rem);
+      align-items: start;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .slots {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .slot {
+      min-height: 4.75rem;
+      padding: 0.7rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.74);
+      color: var(--ink);
+      font-weight: 800;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .slot span {
+      display: block;
+      margin-top: 0.25rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .slot.taken {
+      opacity: 0.42;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+
+    .slot.sel {
+      color: #fff;
+      border-color: var(--sage-dark);
+      background: var(--sage-dark);
+    }
+
+    .slot.sel span { color: rgba(255,255,255,0.82); }
+
+    .booking-panel {
+      padding: 1.25rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.7);
+      box-shadow: var(--shadow);
+    }
+
+    .booking-panel h3 {
+      margin: 0 0 1rem;
+      font-size: 1.25rem;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.35rem;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .check {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .check input {
+      width: auto;
+      margin-top: 0.2rem;
+    }
+
+    .check a {
+      color: var(--sage-dark);
+      font-weight: 800;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.84);
+      color: var(--ink);
+      padding: 0.85rem 0.9rem;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(70, 107, 76, 0.5);
+      box-shadow: 0 0 0 4px rgba(126, 154, 131, 0.15);
+    }
+
+    textarea {
+      min-height: 6rem;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .status {
+      min-height: 2.5rem;
+      display: grid;
+      align-items: center;
+      margin-top: 0.75rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .status.good { color: var(--sage-dark); font-weight: 800; }
+    .status.bad { color: #9a3f33; font-weight: 800; }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(20rem, 1.15fr);
+      gap: clamp(1.5rem, 5vw, 5rem);
+      align-items: stretch;
+    }
+
+    .ci {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ci-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 3rem;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background: rgba(126, 154, 131, 0.16);
+      font-size: 1.35rem;
+    }
+
+    .ci-l { color: var(--muted); font-size: 0.84rem; }
+    .ci-v { margin-top: 0.2rem; font-weight: 800; }
+
+    .socs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1.4rem;
+    }
+
+    .soc {
+      padding: 0.7rem 0.95rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.6);
+      color: var(--sage-dark);
+      font-weight: 750;
+    }
+
+    .map {
+      min-height: 24rem;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 0.5rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(32,35,31,0.045) 1px, transparent 1px),
+        linear-gradient(rgba(32,35,31,0.045) 1px, transparent 1px),
+        rgba(255,255,255,0.62);
+      background-size: 28px 28px;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 2rem clamp(1rem, 4vw, 4rem);
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    .fl { color: var(--ink); font-weight: 800; }
+    .fr { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: flex-end; }
+
+    @media (max-width: 840px) {
+      .navlinks a:not(.btn) { display: none; }
+      .hero,
+      .booking,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero { min-height: auto; }
+      .hero-visual { min-height: 27rem; }
+      .services { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 1rem; }
+      .slots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .form-row { grid-template-columns: 1fr; }
+      footer { display: block; }
+      .fr { justify-content: flex-start; margin-top: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+<div id="glow"></div>
+
+<nav id="nav">
+  <a class="brand" href="#">
+    <span class="brand-mark">MS</span>
+    <span id="brandName">Марина Соколова</span>
+  </a>
+  <div class="navlinks">
+    <a href="#services">Услуги</a>
+    <a href="#booking">Запись</a>
+    <a href="#contacts">Контакты</a>
+    <a class="btn" href="#booking">Записаться</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="r">
+    <div class="eyebrow" id="heroEyebrow">Подология и эстетика стоп</div>
+    <h1 id="heroTitle">Здоровые стопы без неловкости</h1>
+    <p class="lead" id="heroLead">Бережный медицинский педикюр, обработка трещин, мозолей и вросших ногтей в спокойном кабинете с понятным планом ухода.</p>
+    <div class="hero-actions">
+      <a class="btn" href="#booking">Выбрать время</a>
+      <a class="btn ghost" href="#services">Смотреть услуги</a>
+    </div>
+  </div>
+  <div class="hero-visual r" style="transition-delay:.08s">
+    <div class="photo-shape"></div>
+    <div class="toolbox">
+      <b id="heroCardTitle">Стерильные инструменты</b>
+      <span id="heroCardText">Одноразовые расходники, мягкая диагностика и рекомендации после приема.</span>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-head r">
+    <h2>Что можно решить</h2>
+    <p>Фокус на комфорте, гигиене и заметном результате уже после первого визита.</p>
+  </div>
+  <div class="services" id="serviceCards"></div>
+</section>
+
+<section class="booking" id="booking">
+  <div class="r">
+    <div class="eyebrow">Онлайн-запись</div>
+    <h2>Свободные окна</h2>
+    <p class="lead">Выберите удобное время, оставьте контакты, и врач подтвердит запись.</p>
+    <div class="slots" id="slots">
+      <div class="status">Загружаем свободные окна...</div>
+    </div>
+  </div>
+
+  <form class="booking-panel r" id="bookingForm" style="transition-delay:.12s">
+    <h3>Данные для записи</h3>
+    <div class="form-grid">
+      <input type="hidden" name="slotId" id="slotId">
+      <label>
+        Услуга
+        <select name="serviceId" id="serviceSelect" required>
+          <option value="">Загрузка услуг...</option>
+        </select>
+      </label>
+      <div class="form-row">
+        <label>
+          Имя
+          <input name="patientName" autocomplete="name" placeholder="Например, Анна" required>
+        </label>
+        <label>
+          Телефон
+          <input name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 999 123-45-67" required>
+        </label>
+      </div>
+      <label>
+        Как связаться
+        <select name="messenger">
+          <option value="whatsapp">WhatsApp</option>
+          <option value="telegram">Telegram</option>
+          <option value="phone">Позвонить</option>
+        </select>
+      </label>
+      <label>
+        Комментарий
+        <textarea name="comment" placeholder="Что беспокоит, удобные детали, пожелания"></textarea>
+      </label>
+      <label class="check">
+        <input type="checkbox" name="privacyAccepted" required>
+        <span>Я соглашаюсь на обработку персональных данных и принимаю <a href="/privacy.html" target="_blank" rel="noopener">политику конфиденциальности</a> и <a href="/consent.html" target="_blank" rel="noopener">согласие</a>.</span>
+      </label>
+      <button class="btn" id="submitBtn" type="submit">Отправить заявку</button>
+      <div class="status" id="formStatus">Сначала выберите время приема.</div>
+    </div>
+  </form>
+</section>
+
+<section id="contacts">
+  <div class="section-head r">
+    <h2>Контакты</h2>
+    <p>Кабинет рядом с метро, запись через WhatsApp, Telegram или по телефону.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="r">
+      <div class="ci">
+        <div class="ci-icon">📍</div>
+        <div><div class="ci-l">Адрес</div><div class="ci-v" id="contactAddress">Москва, ул. Садовая, 12</div></div>
+      </div>
+      <div class="ci">
+        <div class="ci-icon">📞</div>
+        <div><div class="ci-l">Телефон / WhatsApp</div><div class="ci-v" id="contactPhone">+7 (999) 123-45-67</div></div>
+      </div>
+      <div class="ci">
+        <div class="ci-icon">⏰</div>
+        <div><div class="ci-l">Часы работы</div><div class="ci-v" id="contactHours">Пн-Пт: 10:00-20:00 · Сб: 10:00-17:00</div></div>
+      </div>
+      <div class="socs">
+        <a href="#" class="soc" id="instagramLink">Instagram</a>
+        <a href="#" class="soc" id="whatsappLink">WhatsApp</a>
+        <a href="#" class="soc" id="telegramLink">Telegram</a>
+      </div>
+    </div>
+    <div class="r" style="transition-delay:.12s">
+      <div class="map">
+        <span style="font-size:2rem">📍</span>
+        <span>Карта появится здесь</span>
+        <span style="font-size:0.7rem;opacity:0.5">Яндекс.Карты iframe</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl" id="footerBrand">Марина Соколова · Подолог</div>
+  <div class="fr">
+    <span>© 2026</span>
+    <a href="/privacy.html">Политика конфиденциальности</a>
+    <a href="/admin.html">Кабинет врача</a>
+  </div>
+</footer>
+
+<script>
+const glow = document.getElementById('glow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('sc', scrollY > 50));
+
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('v'); io.unobserve(e.target); }
+}), { threshold: 0.08 });
+document.querySelectorAll('.r').forEach(el => io.observe(el));
+
+const state = {
+  site: null,
+  services: [],
+  slots: [],
+  selectedSlotId: ''
+};
+
+const serviceCards = document.getElementById('serviceCards');
+const serviceSelect = document.getElementById('serviceSelect');
+const slotsEl = document.getElementById('slots');
+const slotIdInput = document.getElementById('slotId');
+const bookingForm = document.getElementById('bookingForm');
+const formStatus = document.getElementById('formStatus');
+const submitBtn = document.getElementById('submitBtn');
+
+init();
+
+async function init() {
+  await Promise.all([loadSite(), loadServices(), loadSlots()]);
+}
+
+async function loadSite() {
+  const site = await fetchJson('/api/site');
+  state.site = site;
+  document.title = site.seo.title;
+  setText('brandName', site.clinic.doctorName);
+  setText('heroEyebrow', site.hero.eyebrow);
+  setText('heroTitle', site.hero.title);
+  setText('heroLead', site.hero.lead);
+  setText('heroCardTitle', site.hero.cardTitle);
+  setText('heroCardText', site.hero.cardText);
+  setText('contactAddress', site.clinic.address);
+  setText('contactPhone', site.clinic.phone);
+  setText('contactHours', site.clinic.workingHours);
+  setText('footerBrand', site.clinic.brand);
+  setHref('instagramLink', site.clinic.instagram);
+  setHref('whatsappLink', site.clinic.whatsapp);
+  setHref('telegramLink', site.clinic.telegram);
+}
+
+async function loadServices() {
+  const { services } = await fetchJson('/api/services');
+  state.services = services;
+
+  serviceCards.innerHTML = services.map((service, index) => `
+    <article class="service r v" style="transition-delay:${index * 0.08}s">
+      <div class="ico">${escapeHtml(service.icon)}</div>
+      <h3>${escapeHtml(service.title)}</h3>
+      <p>${escapeHtml(service.description)}</p>
+      <span class="price">от ${formatRub(service.priceFrom)}</span>
+    </article>
+  `).join('');
+
+  serviceSelect.innerHTML = '<option value="">Выберите услугу</option>' + services.map(service => (
+    `<option value="${escapeHtml(service.id)}">${escapeHtml(service.title)} - от ${formatRub(service.priceFrom)}</option>`
+  )).join('');
+}
+
+async function loadSlots() {
+  const { slots } = await fetchJson('/api/slots?limit=36');
+  state.slots = slots;
+
+  if (!slots.length) {
+    slotsEl.innerHTML = '<div class="status">Свободных окон пока нет. Напишите врачу в WhatsApp.</div>';
+    return;
+  }
+
+  slotsEl.innerHTML = slots.map(slot => `
+    <button
+      class="slot ${slot.available ? '' : 'taken'} ${state.selectedSlotId === slot.id ? 'sel' : ''}"
+      type="button"
+      data-slot-id="${escapeHtml(slot.id)}"
+      ${slot.available ? '' : 'disabled'}
+    >
+      ${escapeHtml(slot.timeLabel)}
+      <span>${escapeHtml(slot.dateLabel)}</span>
+    </button>
+  `).join('');
+
+  slotsEl.querySelectorAll('.slot:not(.taken)').forEach(button => {
+    button.addEventListener('click', () => selectSlot(button.dataset.slotId));
+  });
+}
+
+function selectSlot(slotId) {
+  state.selectedSlotId = slotId;
+  slotIdInput.value = slotId;
+  slotsEl.querySelectorAll('.slot').forEach(button => {
+    button.classList.toggle('sel', button.dataset.slotId === slotId);
+  });
+  const slot = state.slots.find(item => item.id === slotId);
+  formStatus.className = 'status good';
+  formStatus.textContent = `Выбрано: ${slot.dateLabel}, ${slot.timeLabel}.`;
+}
+
+bookingForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  formStatus.className = 'status';
+
+  if (!slotIdInput.value) {
+    formStatus.className = 'status bad';
+    formStatus.textContent = 'Сначала выберите время приема.';
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Отправляем...';
+
+  try {
+    const payload = Object.fromEntries(new FormData(bookingForm).entries());
+    const { booking } = await fetchJson('/api/bookings', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    bookingForm.reset();
+    state.selectedSlotId = '';
+    slotIdInput.value = '';
+    formStatus.className = 'status good';
+    formStatus.textContent = `Готово. Заявка на ${booking.dateLabel}, ${booking.timeLabel} отправлена врачу.`;
+    await loadSlots();
+  } catch (error) {
+    formStatus.className = 'status bad';
+    formStatus.textContent = error.message;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Отправить заявку';
+  }
+});
+
+async function fetchJson(url, options) {
+  const response = await fetch(url, options);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'Не удалось выполнить запрос.');
+  return data;
+}
+
+function formatRub(value) {
+  return `${new Intl.NumberFormat('ru-RU').format(value)} ₽`;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function setText(id, value) {
+  const element = document.getElementById(id);
+  if (element) element.textContent = value;
+}
+
+function setHref(id, value) {
+  const element = document.getElementById(id);
+  if (element && value) element.href = value;
+}
+</script>
+</body>
+</html>

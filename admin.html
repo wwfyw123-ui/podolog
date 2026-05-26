@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Кабинет врача - записи</title>
+  <style>
+    :root {
+      --ink: #20231f;
+      --muted: #6a7068;
+      --line: rgba(32, 35, 31, 0.12);
+      --paper: #faf8f2;
+      --sage: #7e9a83;
+      --sage-dark: #466b4c;
+      --white: rgba(255, 255, 255, 0.78);
+      --danger: #9a3f33;
+      --shadow: 0 24px 80px rgba(58, 67, 53, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(185, 214, 220, 0.4), transparent 28rem),
+        radial-gradient(circle at 100% 0%, rgba(216, 135, 115, 0.22), transparent 24rem),
+        var(--paper);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem clamp(1rem, 4vw, 4rem);
+      border-bottom: 1px solid var(--line);
+      background: rgba(250, 248, 242, 0.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+    }
+
+    main {
+      padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 4rem);
+    }
+
+    h1 {
+      margin: 0 0 0.75rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .lead {
+      max-width: 42rem;
+      margin: 0 0 2rem;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.55;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(15rem, 24rem) auto;
+      gap: 0.75rem;
+      align-items: end;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.35rem;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.84);
+      color: var(--ink);
+      padding: 0.85rem 0.9rem;
+      outline: none;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.9rem;
+      padding: 0 1.1rem;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 800;
+      background: var(--sage-dark);
+      box-shadow: 0 15px 34px rgba(70, 107, 76, 0.2);
+      cursor: pointer;
+    }
+
+    .ghost {
+      color: var(--ink);
+      background: rgba(255,255,255,0.64);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .grid {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .booking {
+      display: grid;
+      grid-template-columns: minmax(10rem, 0.9fr) minmax(14rem, 1fr) minmax(13rem, 1fr) auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 0 12px 38px rgba(73, 80, 68, 0.07);
+    }
+
+    .when {
+      font-size: 1.25rem;
+      font-weight: 850;
+    }
+
+    .sub {
+      margin-top: 0.25rem;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .patient {
+      font-weight: 850;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2rem;
+      padding: 0 0.7rem;
+      border-radius: 999px;
+      background: rgba(126, 154, 131, 0.15);
+      color: var(--sage-dark);
+      font-weight: 850;
+      font-size: 0.82rem;
+    }
+
+    .status-cancelled {
+      background: rgba(154, 63, 51, 0.12);
+      color: var(--danger);
+    }
+
+    .empty, .message {
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.62);
+      color: var(--muted);
+    }
+
+    .message.bad {
+      color: var(--danger);
+      font-weight: 800;
+    }
+
+    @media (max-width: 920px) {
+      header, .toolbar, .booking { grid-template-columns: 1fr; }
+      header { display: grid; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <a class="brand" href="/">
+    <span class="brand-mark">MS</span>
+    <span>Кабинет врача</span>
+  </a>
+  <a class="btn ghost" href="/">На сайт</a>
+</header>
+
+<main>
+  <h1>Записи пациентов</h1>
+  <p class="lead">Здесь появляются заявки с сайта. Для локального запуска токен по умолчанию: dev-admin. Перед публикацией его нужно заменить.</p>
+
+  <div class="toolbar">
+    <label>
+      Админ-токен
+      <input id="token" type="password" placeholder="dev-admin" autocomplete="current-password">
+    </label>
+    <button class="btn" id="loadBtn" type="button">Показать записи</button>
+  </div>
+
+  <div id="message" class="message">Введите токен и загрузите заявки.</div>
+  <div class="grid" id="bookings"></div>
+</main>
+
+<script>
+const tokenInput = document.getElementById('token');
+const loadBtn = document.getElementById('loadBtn');
+const message = document.getElementById('message');
+const bookingsEl = document.getElementById('bookings');
+const savedToken = localStorage.getItem('clinicAdminToken');
+
+if (savedToken) tokenInput.value = savedToken;
+
+loadBtn.addEventListener('click', loadBookings);
+if (savedToken) loadBookings();
+
+async function loadBookings() {
+  const token = tokenInput.value.trim();
+  localStorage.setItem('clinicAdminToken', token);
+  message.className = 'message';
+  message.textContent = 'Загружаем записи...';
+  bookingsEl.innerHTML = '';
+
+  try {
+    const { bookings } = await fetchJson('/api/admin/bookings', {
+      headers: { 'x-admin-token': token }
+    });
+    renderBookings(bookings);
+  } catch (error) {
+    message.className = 'message bad';
+    message.textContent = error.message;
+  }
+}
+
+function renderBookings(bookings) {
+  if (!bookings.length) {
+    message.className = 'empty';
+    message.textContent = 'Заявок пока нет.';
+    return;
+  }
+
+  message.className = 'message';
+  message.textContent = `Найдено записей: ${bookings.length}`;
+  bookingsEl.innerHTML = bookings.map(booking => `
+    <article class="booking">
+      <div>
+        <div class="when">${escapeHtml(booking.timeLabel)}</div>
+        <div class="sub">${escapeHtml(booking.dateLabel)}</div>
+      </div>
+      <div>
+        <div class="patient">${escapeHtml(booking.patientName)}</div>
+        <div class="sub">${escapeHtml(booking.phone)} · ${messengerLabel(booking.messenger)}</div>
+      </div>
+      <div>
+        <div>${escapeHtml(booking.serviceTitle)}</div>
+        <div class="sub">${escapeHtml(booking.priceLabel)}${booking.comment ? ' · ' + escapeHtml(booking.comment) : ''}</div>
+      </div>
+      <div>
+        <select data-id="${escapeHtml(booking.id)}" aria-label="Статус записи">
+          ${statusOption('new', 'Новая', booking.status)}
+          ${statusOption('confirmed', 'Подтверждена', booking.status)}
+          ${statusOption('done', 'Выполнена', booking.status)}
+          ${statusOption('cancelled', 'Отменена', booking.status)}
+        </select>
+      </div>
+    </article>
+  `).join('');
+
+  bookingsEl.querySelectorAll('select').forEach(select => {
+    select.addEventListener('change', () => updateStatus(select.dataset.id, select.value));
+  });
+}
+
+async function updateStatus(id, status) {
+  const token = tokenInput.value.trim();
+  try {
+    await fetchJson(`/api/admin/bookings/${encodeURIComponent(id)}/status`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        'x-admin-token': token
+      },
+      body: JSON.stringify({ status })
+    });
+    await loadBookings();
+  } catch (error) {
+    message.className = 'message bad';
+    message.textContent = error.message;
+  }
+}
+
+async function fetchJson(url, options) {
+  const response = await fetch(url, options);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'Не удалось выполнить запрос.');
+  return data;
+}
+
+function statusOption(value, label, current) {
+  return `<option value="${value}" ${value === current ? 'selected' : ''}>${label}</option>`;
+}
+
+function messengerLabel(value) {
+  return {
+    whatsapp: 'WhatsApp',
+    telegram: 'Telegram',
+    phone: 'Звонок'
+  }[value] || value;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+</script>
+</body>
+</html>
