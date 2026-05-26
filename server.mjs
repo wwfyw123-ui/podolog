@@ -182,10 +182,11 @@ const server = createServer(async (req, res) => {
   }
 });
 
+// === ВОТ ЗДЕСЬ ГЛАВНОЕ ИЗМЕНЕНИЕ ДЛЯ RENDER ===
 if (process.env.NODE_ENV !== "test") {
-  server.listen(port, "127.0.0.1", () => {
-    console.log(`Site: http://127.0.0.1:${port}/`);
-    console.log(`Admin: http://127.0.0.1:${port}/admin.html`);
+  // Заменили 127.0.0.1 на 0.0.0.0
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`Сервер успешно запущен на порту: ${port}`);
     console.log(`Admin token: ${adminToken}`);
   });
 }
