@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запись к подологу</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <div class="logo" id="header-name">Загрузка...</div>
+            <div class="header-right">
+                <a href="#" class="phone-link" id="header-phone"></a>
+                <a href="#booking" class="btn btn-primary">Записаться</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1 id="hero-title">...</h1>
+                <p id="hero-subtitle">...</p>
+                <a href="#booking" class="btn btn-large">Выбрать время</a>
+            </div>
+        </section>
+
+        <section id="services" class="container section">
+            <h2>Наши услуги</h2>
+            <div class="services-grid" id="services-container">
+                <!-- Карточки услуг -->
+            </div>
+        </section>
+
+        <section id="booking" class="container section bg-light rounded-box">
+            <h2>Онлайн-запись</h2>
+            
+            <div id="success-message" class="hidden success-box">
+                <h3>✅ Вы успешно записаны!</h3>
+                <p id="success-details"></p>
+                <button class="btn btn-primary mt-4" onclick="location.reload()">Записаться еще раз</button>
+            </div>
+
+            <form id="booking-form">
+                <div class="form-step">
+                    <h3>1. Выбранная услуга</h3>
+                    <p id="selected-service-text" class="text-muted">Пожалуйста, выберите услугу в списке выше ⬆️</p>
+                    <input type="hidden" id="serviceId" required>
+                </div>
+
+                <div class="form-step">
+                    <h3>2. Выберите дату и время</h3>
+                    <div class="days-scroll" id="days-container"></div>
+                    <div class="times-grid" id="times-container"></div>
+                    <input type="hidden" id="slotId" required>
+                </div>
+
+                <div class="form-step" id="personal-data" style="opacity: 0.5; pointer-events: none;">
+                    <h3>3. Ваши данные</h3>
+                    <div class="input-group">
+                        <input type="text" id="patientName" placeholder="Ваше имя" required minlength="2">
+                        <input type="tel" id="phone" placeholder="Телефон (+7...)" required pattern="^\+?[0-9\s().-]{7,24}$">
+                        <select id="messenger">
+                            <option value="whatsapp">Написать в WhatsApp</option>
+                            <option value="telegram">Написать в Telegram</option>
+                            <option value="phone">Обычный звонок</option>
+                        </select>
+                    </div>
+                    <textarea id="comment" placeholder="Комментарий к записи (необязательно)" rows="3"></textarea>
+                    
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="privacyAccepted" required>
+                        <span>Я согласен на обработку персональных данных</span>
+                    </label>
+
+                    <button type="submit" class="btn btn-large btn-submit" id="submit-btn">Подтвердить запись</button>
+                    <p id="form-error" class="error-text hidden"></p>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner" id="footer-content"></div>
+    </footer>
+
+    <script type="module" src="/js/main.js"></script>
+</body>
+</html>
