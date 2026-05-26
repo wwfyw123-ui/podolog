@@ -80,7 +80,12 @@ const server = createServer(async (req, res) => {
       res.end();
       return;
     }
-
+    if (url.pathname === "/api/admin/reset-db" && req.method === "POST") {
+      if (!isAdmin(req)) return json(res, 401, { error: "Нужен админ-токен." });
+      db.exec("DELETE FROM bookings;"); // Очищаем брони
+      // Опционально: db.exec("DELETE FROM slots;");
+      return json(res, 200, { message: "База данных успешно очищена" });
+    }
     if (url.pathname === "/api/health" && req.method === "GET") {
       return json(res, 200, { ok: true });
     }
